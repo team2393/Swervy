@@ -10,6 +10,11 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+/** One swerve module
+ * 
+ *  Supports controlling the speed and heading
+ *  of one module.
+ */
 public class Module
 {
     private final Translation2d location;
@@ -18,7 +23,10 @@ public class Module
 
     private NetworkTableEntry nt_speed, nt_heading;
     
-    Module(final String name, final Translation2d location)
+    /** @param name Module name, used for network table entries
+     *  @param location Location relative to center of robot
+     */
+    public Module(final String name, final Translation2d location)
     {
         this.location = location;
 
@@ -26,11 +34,13 @@ public class Module
         nt_heading = SmartDashboard.getEntry(name + "_heading");
     }
 
+    /** @return Location relative to center of robot */
     public Translation2d getLocation()
     {
         return location;
     }
     
+    /** @return Current speed and heading */
     public SwerveModuleState getState()
     {
         return desired_state;

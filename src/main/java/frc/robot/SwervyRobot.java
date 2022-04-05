@@ -5,9 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -47,9 +45,18 @@ public class SwervyRobot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
+        int pivot;
+        if (OperatorInterface.pivotLeft())
+            pivot = 0;
+        else if (OperatorInterface.pivotRight())
+            pivot = 1;
+        else
+            pivot = -1;
         drivetrain.drive(OperatorInterface.getForwardBackward(),
                          OperatorInterface.getLeftRight(),
-                         OperatorInterface.getRotation());
+                         OperatorInterface.getRotation(),
+                      
+                         pivot);
         
         field.setRobotPose(drivetrain.getPose());
     }

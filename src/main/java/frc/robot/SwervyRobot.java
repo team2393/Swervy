@@ -16,23 +16,21 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.drivetrain.DriveByJoystickCommand;
 import frc.robot.drivetrain.Drivetrain;
 
-/**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
- * each mode, as described in the TimedRobot documentation. If you change the name of this class or
- * the package after creating this project, you must also update the build.gradle file in the
- * project.
- */
+/** Robot for testing swerve drive */
 public class SwervyRobot extends TimedRobot
 {
     private final Drivetrain drivetrain = new Drivetrain();
-    Field2d field = new Field2d();
+    private final DriveByJoystickCommand joydrive = new DriveByJoystickCommand(drivetrain);
+    private final Field2d field = new Field2d();
 
     @Override
     public void robotInit()
     {
         SmartDashboard.putData("Field", field);
+        SmartDashboard.putData("Drivetrain", drivetrain);
     }
 
     @Override
@@ -42,6 +40,7 @@ public class SwervyRobot extends TimedRobot
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
 
+        // Update field with latest robot location
         field.setRobotPose(drivetrain.getPose());
     }
 
@@ -49,23 +48,12 @@ public class SwervyRobot extends TimedRobot
     public void teleopInit()
     {
         drivetrain.reset(7.64, 1.764, 90);
+        joydrive.schedule();
     }
 
     @Override
     public void teleopPeriodic()
     {
-        int pivot;
-        if (OperatorInterface.pivotLeft())
-            pivot = 0;
-        else if (OperatorInterface.pivotRight())
-            pivot = 1;
-        else
-            pivot = -1;
-        drivetrain.drive(OperatorInterface.getForwardBackward(),
-                         OperatorInterface.getLeftRight(),
-                         OperatorInterface.getRotation(),
-                      
-                         pivot);
     }
 
     @Override
@@ -73,6 +61,7 @@ public class SwervyRobot extends TimedRobot
     {
         // Max speed used for the created trajectory
         TrajectoryConfig config = new TrajectoryConfig(Limits.MAX_SPEED/2.0, Limits.MAX_SPEED/2.0);
+        
         // Create trajectory
         // The heading of each waypoint is used to guide the
         // trajectory along the path,
@@ -101,9 +90,5 @@ public class SwervyRobot extends TimedRobot
     @Override
     public void autonomousPeriodic()
     {
-        // final Pose2d pose = field.getRobotPose();
-        // field.setRobotPose(pose.getX() + 1 * TimedRobot.kDefaultPeriod,
-        //                    pose.getY(),
-        //                    pose.getRotation());
     }
 }

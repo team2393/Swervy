@@ -73,6 +73,9 @@ public class Drivetrain extends SubsystemBase
                               i,
                             modules[i].getLocation().getX(),
                             modules[i].getLocation().getY());
+        
+        // By default, tell motors to stay put
+        setDefaultCommand(new IdleCommand(this));
     }
 
     /** Drive!

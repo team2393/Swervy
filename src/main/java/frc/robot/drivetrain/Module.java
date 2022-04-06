@@ -60,6 +60,8 @@ public class Module
      */
     public void drive(final SwerveModuleState state)
     {
+        // TODO SwerveModuleState.optimize(state, currentAngle)
+
         desired_state = state;
 
         nt_speed.setDouble(desired_state.speedMetersPerSecond);

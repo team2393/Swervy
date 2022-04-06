@@ -4,6 +4,10 @@
 
 package frc.robot.drivetrain;
 
+import java.util.function.Consumer;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -11,9 +15,14 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import frc.robot.Limits;
 
 /** Drivetrain, made up of swerve modules */
 public class Drivetrain extends SubsystemBase
@@ -95,7 +104,12 @@ public class Drivetrain extends SubsystemBase
         return odometry.getPoseMeters();
     }
 
-    public void reset(double x, double y, int heading)
+    /** Reset position
+     *  @param x Field position X [m]
+     *  @param y Field position Y [m]
+     *  @param heading Field heading [degrees]
+     */
+    public void reset(final double x, final double y, final double heading)
     {
         sim_heading = heading;
         odometry.resetPosition(new Pose2d(x, y, Rotation2d.fromDegrees(heading)),
@@ -105,10 +119,51 @@ public class Drivetrain extends SubsystemBase
     @Override
     public void periodic()
     {
-        odometry.update(Rotation2d.fromDegrees(sim_heading),
+        // Update estimated position from module states and gyro
+        // TODO Read from gyro
+        final double heading;
+        if (RobotBase.isSimulation())
+            heading = sim_heading;
+        else
+            heading = 0.0;
+        odometry.update(Rotation2d.fromDegrees(heading),
                         modules[0].getState(),
                         modules[1].getState(),
                         modules[2].getState(),
                         modules[3].getState());
     }
+
+    /** Create command that follows a trajectory
+     *  @param robot_heading Desired robot heading at endppoint [degrees]
+     *  @param trajectory Trajectory to follow
+     *  @return Command that follows the trajectory
+     */
+    public CommandBase createFollower(final double robot_heading, final Trajectory trajectory)
+    {
+        final Rotation2d heading_rad = Rotation2d.fromDegrees(robot_heading);
+        
+        // PID controllers for swerving in X, Y and rotation
+        // TODO Tune
+        final PIDController xpid = new PIDController(1, 0, 0);
+        final PIDController ypid = new PIDController(1, 0, 0);
+        // angle controller uses radians
+        final ProfiledPIDController anglepid = new ProfiledPIDController(10, 0, 0,
+                new TrapezoidProfile.Constraints(Math.toRadians(Limits.MAX_ROTATION),
+                                                 Math.toRadians(Limits.MAX_ROTATION)));
+        anglepid.enableContinuousInput(-Math.PI, Math.PI);
+
+        // Called by SwerveControllerCommand with desired swerve module states
+        final Consumer<SwerveModuleState[]> update_modules = states ->
+        {
+            // Pass on to respective module
+            for (int i=0; i<N; ++i)
+                modules[i].drive(states[i]);
+            // Simulate rotation
+            if (RobotBase.isSimulation())
+                sim_heading += Math.toDegrees(kinematics.toChassisSpeeds(states).omegaRadiansPerSecond) * TimedRobot.kDefaultPeriod;
+        };
+        return new SwerveControllerCommand(trajectory,
+           this::getPose,
+           kinematics, xpid, ypid, anglepid, () -> heading_rad, update_modules, this);
+   }
 }

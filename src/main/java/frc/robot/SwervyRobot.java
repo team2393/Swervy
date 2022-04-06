@@ -29,6 +29,12 @@ public class SwervyRobot extends TimedRobot
     @Override
     public void robotInit()
     {
+        System.out.println("********************************");
+        System.out.println("********************************");
+        System.out.println("** " + getClass().getName());
+        System.out.println("********************************");
+        System.out.println("********************************");
+
         SmartDashboard.putData("Field", field);
         SmartDashboard.putData("Drivetrain", drivetrain);
     }

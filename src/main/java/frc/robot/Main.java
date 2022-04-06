@@ -12,6 +12,6 @@ public final class Main
     /** Main initialization function. Launches robot code. */
     public static void main(String... args)
     {
-        RobotBase.startRobot(SwervyRobot::new);
+        RobotBase.startRobot(ModuleTestRobot::new);
     }
 }

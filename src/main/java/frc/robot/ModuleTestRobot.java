@@ -4,14 +4,20 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.AnalogEncoder;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.drivetrain.SparkMini;
 
 /** Robot for testing single swerve module */
 public class ModuleTestRobot extends TimedRobot
 {
     private final SparkMini rotator = new SparkMini(0);
+    private final WPI_TalonFX runner = new WPI_TalonFX(1);
+    private final AnalogEncoder encoder = new AnalogEncoder(0);
 
     @Override
     public void robotInit()
@@ -21,6 +27,17 @@ public class ModuleTestRobot extends TimedRobot
         System.out.println("** " + getClass().getName());
         System.out.println("********************************");
         System.out.println("********************************");
+
+        runner.configFactoryDefault();
+        runner.clearStickyFaults();
+        runner.configOpenloopRamp(1.0);
+    }
+
+    @Override
+    public void robotPeriodic()
+    {
+        SmartDashboard.putNumber("Position", encoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Rotations", encoder.get());
     }
 
     @Override
@@ -32,7 +49,10 @@ public class ModuleTestRobot extends TimedRobot
     public void teleopPeriodic()
     {
         // "Forward" for positive
-        rotator.set(MathUtil.applyDeadband(-OperatorInterface.joystick.getRightY(),
+        runner.set(MathUtil.applyDeadband(-OperatorInterface.joystick.getRightY(),
+                                          0.05));
+     
+        rotator.set(MathUtil.applyDeadband(OperatorInterface.joystick.getLeftX(),
                                            0.05));
     }
 }

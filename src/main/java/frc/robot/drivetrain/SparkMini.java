@@ -20,7 +20,7 @@ public class SparkMini extends PWMMotorController
         // never reaching full reverse speed.
         // A low end of 0.503 seems to avoid these problems
         // and set(-1) gets full reverse speed.
-        m_pwm.setBounds(2.500, 1.55, 1.50, 1.45, 0.503);
+        m_pwm.setBounds(2.497, 1.52, 1.50, 1.48, 0.503);
         m_pwm.setPeriodMultiplier(PWM.PeriodMultiplier.k1X);
         m_pwm.setSpeed(0.0);
         m_pwm.setZeroLatch();

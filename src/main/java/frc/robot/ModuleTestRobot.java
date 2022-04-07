@@ -76,7 +76,8 @@ public class ModuleTestRobot extends TimedRobot
             module.configureHeadingPID(SmartDashboard.getNumber("heading P", 0),
                                        SmartDashboard.getNumber("heading I", 0),
                                        SmartDashboard.getNumber("heading D", 0));
-            module.drive(speed, rotation * 180.0);
+            // Avoid 180 because of wraparound
+            module.drive(speed, rotation * 170.0);
         }
         else
             module.driveDirect(speed, rotation);

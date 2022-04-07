@@ -1,0 +1,24 @@
+{
+  "LiveWindow": {
+    "Ungrouped": {
+      "PIDController[1]": {
+        "open": true
+      },
+      "SparkMini[0]": {
+        "open": true
+      },
+      "Spark[0]": {
+        "open": true
+      },
+      "open": true
+    },
+    "open": true
+  },
+  "NetworkTables Settings": {
+    "mode": "Client",
+    "serverTeam": "2393"
+  },
+  "SmartDashboard": {
+    "open": true
+  }
+}

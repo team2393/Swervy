@@ -10,5 +10,5 @@ public class Limits
     public static final double MAX_SPEED = 2.5;
 
     /** Maximum rotational speed [degrees/s] */
-    public static final double MAX_ROTATION = 180.0;
+    public static final double MAX_ROTATION = 250.0;
 }

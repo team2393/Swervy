@@ -4,21 +4,26 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.AnalogEncoder;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.drivetrain.SparkMini;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Button;
+import frc.robot.drivetrain.Module;
 
 /** Robot for testing single swerve module */
 public class ModuleTestRobot extends TimedRobot
 {
-    private final SparkMini rotator = new SparkMini(0);
-    private final WPI_TalonFX runner = new WPI_TalonFX(1);
-    private final AnalogEncoder encoder = new AnalogEncoder(0);
+    private final Module module = new Module("Swerve1",
+                                             new Translation2d(1, 0),
+                                             0);
 
+    final CommandBase reset = new InstantCommand(module::reset);
+                                             
     @Override
     public void robotInit()
     {
@@ -28,16 +33,26 @@ public class ModuleTestRobot extends TimedRobot
         System.out.println("********************************");
         System.out.println("********************************");
 
-        runner.configFactoryDefault();
-        runner.clearStickyFaults();
-        runner.configOpenloopRamp(1.0);
+        // runner.configFactoryDefault();
+        // runner.clearStickyFaults();
+        // runner.configOpenloopRamp(1.0);
+
+        SmartDashboard.setDefaultNumber("heading P", 0.5);
+        SmartDashboard.setDefaultNumber("heading I", 0);
+        SmartDashboard.setDefaultNumber("heading D", 0);
     }
+
+    private double last_angle = 0.0;
 
     @Override
     public void robotPeriodic()
     {
-        SmartDashboard.putNumber("Position", encoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Rotations", encoder.get());
+        CommandScheduler.getInstance().run();
+
+        final double angle = module.getHeading().getDegrees();
+        final double rot_speed = (angle - last_angle) / TimedRobot.kDefaultPeriod;
+        last_angle = angle;
+        SmartDashboard.putNumber("Rotation Speed", rot_speed);
     }
 
     @Override
@@ -48,11 +63,22 @@ public class ModuleTestRobot extends TimedRobot
     @Override
     public void teleopPeriodic()
     {
+        if (OperatorInterface.joystick.getLeftBumperPressed())
+            reset.schedule();
+
         // "Forward" for positive
-        runner.set(MathUtil.applyDeadband(-OperatorInterface.joystick.getRightY(),
-                                          0.05));
-     
-        rotator.set(MathUtil.applyDeadband(OperatorInterface.joystick.getLeftX(),
-                                           0.05));
+        final double speed = MathUtil.applyDeadband(-OperatorInterface.joystick.getRightY(),
+                                                    0.05);
+        final double rotation = MathUtil.applyDeadband(-OperatorInterface.joystick.getLeftX(),
+                                                       0.05);
+        if (OperatorInterface.joystick.getRightBumper())
+        {
+            module.configureHeadingPID(SmartDashboard.getNumber("heading P", 0),
+                                       SmartDashboard.getNumber("heading I", 0),
+                                       SmartDashboard.getNumber("heading D", 0));
+            module.drive(speed, rotation * 180.0);
+        }
+        else
+            module.driveDirect(speed, rotation);
     }
 }

@@ -20,6 +20,10 @@
       "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[9]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
+      "/LiveWindow/Ungrouped/SparkMini[0]": "Motor Controller",
+      "/LiveWindow/Ungrouped/SparkMini[1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/SparkMini[2]": "Motor Controller",
+      "/LiveWindow/Ungrouped/SparkMini[3]": "Motor Controller",
       "/SmartDashboard/Drivetrain": "Subsystem",
       "/SmartDashboard/Field": "Field2d"
     },

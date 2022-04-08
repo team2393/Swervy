@@ -5,24 +5,24 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Button;
-import frc.robot.drivetrain.Module;
+import frc.robot.drivetrain.Rotator;
 
-/** Robot for testing single swerve module */
-public class ModuleTestRobot extends TimedRobot
+/** Robot for testing single swerve module's rotation
+ * 
+ *  Left joysick: Rotate
+ *  Left bumper: Reset heading to zero
+ *  Hold right bumber: Closed loop -180..180
+ */
+public class RotationTestRobot extends TimedRobot
 {
-    private final Module module = new Module("Swerve1",
-                                             new Translation2d(1, 0),
-                                             0);
+    private final Rotator rotator = new Rotator(0, 0.0);
 
-    final CommandBase reset = new InstantCommand(module::reset);
+    final CommandBase reset = new InstantCommand(rotator::reset);
                                              
     @Override
     public void robotInit()
@@ -32,10 +32,6 @@ public class ModuleTestRobot extends TimedRobot
         System.out.println("** " + getClass().getName());
         System.out.println("********************************");
         System.out.println("********************************");
-
-        // runner.configFactoryDefault();
-        // runner.clearStickyFaults();
-        // runner.configOpenloopRamp(1.0);
 
         SmartDashboard.setDefaultNumber("heading P", 0.5);
         SmartDashboard.setDefaultNumber("heading I", 0);
@@ -49,10 +45,13 @@ public class ModuleTestRobot extends TimedRobot
     {
         CommandScheduler.getInstance().run();
 
-        final double angle = module.getHeading().getDegrees();
-        final double rot_speed = (angle - last_angle) / TimedRobot.kDefaultPeriod;
+        final double angle = rotator.getRawHeading();
+        final double diff = (Math.abs(angle - last_angle) + 360.0) % 360.0;
+        final double rot_speed = diff / TimedRobot.kDefaultPeriod;
         last_angle = angle;
         SmartDashboard.putNumber("Rotation Speed", rot_speed);
+        SmartDashboard.putNumber("Raw Angle", angle);
+        SmartDashboard.putNumber("Heading", rotator.getHeading().getDegrees());
     }
 
     @Override
@@ -66,20 +65,18 @@ public class ModuleTestRobot extends TimedRobot
         if (OperatorInterface.joystick.getLeftBumperPressed())
             reset.schedule();
 
-        // "Forward" for positive
-        final double speed = MathUtil.applyDeadband(-OperatorInterface.joystick.getRightY(),
-                                                    0.05);
-        final double rotation = MathUtil.applyDeadband(-OperatorInterface.joystick.getLeftX(),
-                                                       0.05);
+        final double input = -OperatorInterface.joystick.getLeftX();
+        SmartDashboard.putNumber("Joystick", input);
+        final double rotation = MathUtil.applyDeadband(input, 0.15);
         if (OperatorInterface.joystick.getRightBumper())
         {
-            module.configureHeadingPID(SmartDashboard.getNumber("heading P", 0),
-                                       SmartDashboard.getNumber("heading I", 0),
-                                       SmartDashboard.getNumber("heading D", 0));
+            rotator.configureHeadingPID(SmartDashboard.getNumber("heading P", 0),
+                                        SmartDashboard.getNumber("heading I", 0),
+                                        SmartDashboard.getNumber("heading D", 0));
             // Avoid 180 because of wraparound
-            module.drive(speed, rotation * 170.0);
+            rotator.driveHeading(rotation * 170.0);
         }
         else
-            module.driveDirect(speed, rotation);
+            rotator.driveRotation(rotation);
     }
 }

@@ -22,7 +22,7 @@ import frc.robot.Limits;
  *  Supports controlling the speed and heading
  *  of one module.
  */
-public class Module
+public class SwerveModule
 {
     private final Translation2d location;
     private final AnalogInput encoder;
@@ -40,7 +40,7 @@ public class Module
      *  @param location Location relative to center of robot
      *  @param channel Channel used for analog encoder, rotation PWM and drive CAN
      */
-    public Module(final String name, final Translation2d location,
+    public SwerveModule(final String name, final Translation2d location,
                   final int channel)
     {
         this.location = location;

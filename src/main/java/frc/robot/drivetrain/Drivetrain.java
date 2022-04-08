@@ -49,10 +49,10 @@ public class Drivetrain extends SubsystemBase
      */
     private final SwerveModule[] modules = new SwerveModule[]
     {
-        new SwerveModule("Swerve0", new Translation2d(module_distance, Rotation2d.fromDegrees(45)),     0),
-        new SwerveModule("Swerve1", new Translation2d(module_distance, Rotation2d.fromDegrees(-45)),    1),
-        new SwerveModule("Swerve2", new Translation2d(module_distance, Rotation2d.fromDegrees(-90-45)), 2),
-        new SwerveModule("Swerve3", new Translation2d(module_distance, Rotation2d.fromDegrees(90+45)),  3)
+        new SwerveModule("Swerve0", new Translation2d(module_distance, Rotation2d.fromDegrees(45)),     0, 0.0,  1),
+        new SwerveModule("Swerve1", new Translation2d(module_distance, Rotation2d.fromDegrees(-45)),    1, 0.0,  2),
+        new SwerveModule("Swerve2", new Translation2d(module_distance, Rotation2d.fromDegrees(-90-45)), 2, 0.0,  3),
+        new SwerveModule("Swerve3", new Translation2d(module_distance, Rotation2d.fromDegrees(90+45)),  3, 0.0,  4)
     };
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(modules[0].getLocation(),

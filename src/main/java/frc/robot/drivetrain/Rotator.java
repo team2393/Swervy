@@ -70,7 +70,7 @@ public class Rotator
     /** Drive open-loop
      *  @param rotation Rotation (-1..1), positive is "counter clockwise"
      */
-    public void driveRotation(final double rotation)
+    public void setRotation(final double rotation)
     {
         rotator.set(rotation);
     }
@@ -78,7 +78,7 @@ public class Rotator
     /** Drive closed-loop
      *  @param heading Desired heading [degrees]
      */
-    public void driveHeading(final double heading)
+    public void setHeading(final double heading)
     {
         if (RobotBase.isSimulation())
             zero = heading;

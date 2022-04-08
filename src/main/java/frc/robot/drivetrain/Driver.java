@@ -8,7 +8,6 @@ import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.RobotBase;
 
 /** Driver, part of a swerve module */
 public class Driver

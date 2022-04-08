@@ -74,9 +74,9 @@ public class RotationTestRobot extends TimedRobot
                                         SmartDashboard.getNumber("heading I", 0),
                                         SmartDashboard.getNumber("heading D", 0));
             // Avoid 180 because of wraparound
-            rotator.driveHeading(rotation * 170.0);
+            rotator.setHeading(rotation * 170.0);
         }
         else
-            rotator.driveRotation(rotation);
+            rotator.setRotation(rotation);
     }
 }

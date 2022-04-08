@@ -67,7 +67,7 @@ public class RotationTestRobot extends TimedRobot
 
         final double input = -OperatorInterface.joystick.getLeftX();
         SmartDashboard.putNumber("Joystick", input);
-        final double rotation = MathUtil.applyDeadband(input, 0.15);
+        final double rotation = MathUtil.applyDeadband(input, Limits.DEAD_STICK);
         if (OperatorInterface.joystick.getRightBumper())
         {
             rotator.configureHeadingPID(SmartDashboard.getNumber("heading P", 0),

@@ -8,9 +8,13 @@ package frc.robot;
  *  May be lower than actual maximum
  */
 public class Limits
-{
+{    
+    /** Joystick deadband */
+    public static final double DEAD_STICK = 0.15;
+
     /** Maximum swerve speed [m/s] */
-    public static final double MAX_SPEED = 2.5;
+    // Actual maximum is about 3 m/s
+    public static final double MAX_SPEED = 1.5;
 
     /** Maximum rotational speed [degrees/s] */
     // Actual maximum is around 600 deg/s

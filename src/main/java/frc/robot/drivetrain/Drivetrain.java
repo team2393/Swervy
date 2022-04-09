@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
-import frc.robot.Limits;
+import frc.robot.Settings;
 
 /** Drivetrain, made up of swerve modules */
 public class Drivetrain extends SubsystemBase
@@ -53,10 +53,10 @@ public class Drivetrain extends SubsystemBase
      */
     private final SwerveModule[] modules = new SwerveModule[]
     {
-        new SwerveModule("Swerve0", new Translation2d(module_distance, Rotation2d.fromDegrees(45)),     0, 0.0,  1),
-        new SwerveModule("Swerve1", new Translation2d(module_distance, Rotation2d.fromDegrees(-45)),    1, 0.0,  2),
-        new SwerveModule("Swerve2", new Translation2d(module_distance, Rotation2d.fromDegrees(-90-45)), 2, 0.0,  3),
-        new SwerveModule("Swerve3", new Translation2d(module_distance, Rotation2d.fromDegrees(90+45)),  3, 0.0,  4)
+        new SwerveModule("Swerve0", new Translation2d(module_distance, Rotation2d.fromDegrees(45)),     0, Settings.MODULE_ZERO[0],  1),
+        new SwerveModule("Swerve1", new Translation2d(module_distance, Rotation2d.fromDegrees(-45)),    1, Settings.MODULE_ZERO[1],  2),
+        new SwerveModule("Swerve2", new Translation2d(module_distance, Rotation2d.fromDegrees(-90-45)), 2, Settings.MODULE_ZERO[2],  3),
+        new SwerveModule("Swerve3", new Translation2d(module_distance, Rotation2d.fromDegrees(90+45)),  3, Settings.MODULE_ZERO[3],  4)
     };
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(modules[0].getLocation(),
@@ -92,11 +92,16 @@ public class Drivetrain extends SubsystemBase
     public void drive(final double vx, final double vy, final double vr,
                       final int pivot_module)
     {
+        // TODO Offer variant for drive-by-joystick that uses coordinates relative to robot
+        // For example, change this to accept ChassisSpeeds and then call with
+        // ChassisSpeeds.fromFieldRelativeSpeeds(vx, vy, vr, getHeading)
+
         Translation2d pivot;
         if (pivot_module < 0)
             pivot = center;
         else
             pivot = modules[pivot_module].getLocation();
+
         final SwerveModuleState states[] = kinematics.toSwerveModuleStates(new ChassisSpeeds(vx, vy, Math.toRadians(vr)),
                                                                            pivot);
         for (int i=0; i<N; ++i)
@@ -149,7 +154,7 @@ public class Drivetrain extends SubsystemBase
                                       final double... xyh)
     {        
         // Max speed used for the created trajectory
-        final TrajectoryConfig config = new TrajectoryConfig(Limits.MAX_SPEED, 2*Limits.MAX_SPEED);
+        final TrajectoryConfig config = new TrajectoryConfig(Settings.MAX_SPEED, 2*Settings.MAX_SPEED);
 
         if (xyh.length % 3 != 0)
             throw new IllegalArgumentException("Expected X, Y, Heading[], got " + xyh.length + " elements");
@@ -175,8 +180,8 @@ public class Drivetrain extends SubsystemBase
         final PIDController ypid = new PIDController(1, 0, 0);
         // angle controller uses radians
         final ProfiledPIDController anglepid = new ProfiledPIDController(1, 0, 0,
-                new TrapezoidProfile.Constraints(Math.toRadians(Limits.MAX_ROTATION),
-                                                 Math.toRadians(Limits.MAX_ROTATION)));
+                new TrapezoidProfile.Constraints(Math.toRadians(Settings.MAX_ROTATION),
+                                                 Math.toRadians(Settings.MAX_ROTATION)));
         anglepid.enableContinuousInput(-Math.PI, Math.PI);
 
         // Called by SwerveControllerCommand with desired swerve module states

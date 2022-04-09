@@ -3,11 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
-/** Speed limits as they're used to operate the robot
- * 
- *  May be lower than actual maximum
- */
-public class Limits
+/** Speed limits, zero headings etc. */
+public class Settings
 {    
     /** Joystick deadband */
     public static final double DEAD_STICK = 0.15;
@@ -23,4 +20,9 @@ public class Limits
     /** Maximum rotational voltage */
     public static final double MAX_ROTATION_VOLTAGE = 8.0;
 
+    /** Zero heading for module 0-3 */
+    public static final double[] MODULE_ZERO = { 342.0,
+                                                   0.0,
+                                                   0.0,
+                                                   0.0 };
 }

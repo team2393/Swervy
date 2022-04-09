@@ -11,7 +11,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
-import frc.robot.Limits;
+import frc.robot.Settings;
 
 /** Rotator, part of a swerve module */
 public class Rotator
@@ -19,7 +19,7 @@ public class Rotator
     private final AnalogInput encoder;
     private final SparkMini rotator;
     private final ProfiledPIDController heading_pid = new ProfiledPIDController(0.5, 0, 0,
-        new TrapezoidProfile.Constraints(Limits.MAX_ROTATION, 2*Limits.MAX_ROTATION));
+        new TrapezoidProfile.Constraints(Settings.MAX_ROTATION, 2*Settings.MAX_ROTATION));
 
     /** Heading that's defined as "zero"
      * 
@@ -85,7 +85,7 @@ public class Rotator
         else
         {
             double voltage = heading_pid.calculate(getHeading().getDegrees(), heading);
-            voltage = MathUtil.clamp(voltage, -Limits.MAX_ROTATION_VOLTAGE, Limits.MAX_ROTATION_VOLTAGE);
+            voltage = MathUtil.clamp(voltage, -Settings.MAX_ROTATION_VOLTAGE, Settings.MAX_ROTATION_VOLTAGE);
             rotator.setVoltage(voltage);
         }
     }

@@ -8,20 +8,25 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.drivetrain.Driver;
 import frc.robot.drivetrain.Rotator;
 
-/** Robot for testing single swerve module's rotator
+/** Robot for testing single swerve module
  * 
  *  Left joysick: Rotate
- *  Left bumper: Reset heading to zero
+ *  Left Trigger: Rotate real slow
+ *  Left bumper: Reset heading and position to zero
  *  Hold right bumber: Closed loop -180..180
+
+ *  Right joysick: Driver speed
  * 
  *  "Raw Angle" can be used to determine the zero offset of a module
  */
-public class RotatorTestRobot extends TimedRobot
+public class ModuleTestRobot extends TimedRobot
 {
-    private final Rotator rotator = new Rotator(0, 0.0);
-                                             
+    private final Rotator rotator = new Rotator(0, Settings.MODULE_ZERO[0]);
+    private final Driver driver = new Driver(1);                      
+    
     @Override
     public void robotInit()
     {
@@ -30,10 +35,6 @@ public class RotatorTestRobot extends TimedRobot
         System.out.println("** " + getClass().getName());
         System.out.println("********************************");
         System.out.println("********************************");
-
-        SmartDashboard.setDefaultNumber("heading P", 0.5);
-        SmartDashboard.setDefaultNumber("heading I", 0);
-        SmartDashboard.setDefaultNumber("heading D", 0);
     }
 
     private double last_angle = 0.0;
@@ -50,6 +51,9 @@ public class RotatorTestRobot extends TimedRobot
         SmartDashboard.putNumber("Rotation Speed", rot_speed);
         SmartDashboard.putNumber("Raw Angle", angle);
         SmartDashboard.putNumber("Heading", rotator.getHeading().getDegrees());
+
+        SmartDashboard.putNumber("Position", driver.getPosition());
+        SmartDashboard.putNumber("Speed", driver.getSpeed());
     }
 
     @Override
@@ -61,20 +65,27 @@ public class RotatorTestRobot extends TimedRobot
     public void teleopPeriodic()
     {
         if (OperatorInterface.joystick.getLeftBumperPressed())
+        {
             rotator.reset();
+            driver.reset();
+        }
 
-        final double input = -OperatorInterface.joystick.getLeftX();
-        SmartDashboard.putNumber("Joystick", input);
-        final double rotation = MathUtil.applyDeadband(input, Settings.DEAD_STICK);
+        double input = -OperatorInterface.joystick.getLeftX();
+        SmartDashboard.putNumber("Joystick Rotation", input);
+        double rotation = MathUtil.applyDeadband(input, Settings.DEAD_STICK);
+        if (OperatorInterface.joystick.getLeftTriggerAxis() > 0.5)
+            rotation /= 4;
         if (OperatorInterface.joystick.getRightBumper())
         {
-            rotator.configureHeadingPID(SmartDashboard.getNumber("heading P", 0),
-                                        SmartDashboard.getNumber("heading I", 0),
-                                        SmartDashboard.getNumber("heading D", 0));
             // Avoid 180 because of wraparound
             rotator.setHeading(rotation * 170.0);
         }
         else
             rotator.setRotation(rotation);
+
+        input = -OperatorInterface.joystick.getRightY();
+        SmartDashboard.putNumber("Joystick Speed", input);
+        final double speed = MathUtil.applyDeadband(input, Settings.DEAD_STICK);
+        driver.setSpeed(Settings.MAX_SPEED * speed);
     }
 }

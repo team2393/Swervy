@@ -4,6 +4,7 @@
 
 package frc.robot.drivetrain;
 
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -28,6 +29,9 @@ public class Driver
         driver.configClosedloopRamp(0.5);
         driver.configVoltageCompSaturation(10.0);
         driver.enableVoltageCompensation(true);
+
+        // Reduce CAN status frame rates
+        driver.setStatusFramePeriod(StatusFrameEnhanced.Status_1_General, 250);
 
         // 1m/s = 4200 units/100ms = 0.19 output
         // kF = 1023 * 0.19 / 4200 = 0.0462

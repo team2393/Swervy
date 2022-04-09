@@ -56,11 +56,11 @@ public class DriveMotorTestRobot extends TimedRobot
 
         final double input = -OperatorInterface.joystick.getRightY();
         SmartDashboard.putNumber("Joystick", input);
-        final double speed = MathUtil.applyDeadband(input, Limits.DEAD_STICK);
+        final double speed = MathUtil.applyDeadband(input, Settings.DEAD_STICK);
         if (OperatorInterface.joystick.getRightBumper())
         {
-            driver.setSpeed(Limits.MAX_SPEED*speed);
-            SmartDashboard.putNumber("Request", Limits.MAX_SPEED*speed);
+            driver.setSpeed(Settings.MAX_SPEED*speed);
+            SmartDashboard.putNumber("Request", Settings.MAX_SPEED*speed);
         }
         else
         {

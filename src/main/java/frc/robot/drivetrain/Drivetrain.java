@@ -4,6 +4,8 @@
 
 package frc.robot.drivetrain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -16,6 +18,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
@@ -138,6 +142,26 @@ public class Drivetrain extends SubsystemBase
 
     /** Create command that follows a trajectory
      *  @param robot_heading Desired robot heading at endppoint [degrees]
+     *  @param xyh Waypoints X, Y, Heading
+     *  @return Command that follows the trajectory
+     */
+    public CommandBase createFollower(final double robot_heading,
+                                      final double... xyh)
+    {        
+        // Max speed used for the created trajectory
+        final TrajectoryConfig config = new TrajectoryConfig(Limits.MAX_SPEED, 2*Limits.MAX_SPEED);
+
+        if (xyh.length % 3 != 0)
+            throw new IllegalArgumentException("Expected X, Y, Heading[], got " + xyh.length + " elements");
+        final List<Pose2d> waypoints = new ArrayList<>();
+        for (int i=0; i<xyh.length; i+=3)
+            waypoints.add(new Pose2d(xyh[i], xyh[i+1], Rotation2d.fromDegrees(xyh[i+2])));
+        final Trajectory trajectory = TrajectoryGenerator.generateTrajectory(waypoints, config);
+        return createFollower(robot_heading, trajectory);
+    }
+
+    /** Create command that follows a trajectory
+     *  @param robot_heading Desired robot heading at endppoint [degrees]
      *  @param trajectory Trajectory to follow
      *  @return Command that follows the trajectory
      */
@@ -150,7 +174,7 @@ public class Drivetrain extends SubsystemBase
         final PIDController xpid = new PIDController(1, 0, 0);
         final PIDController ypid = new PIDController(1, 0, 0);
         // angle controller uses radians
-        final ProfiledPIDController anglepid = new ProfiledPIDController(10, 0, 0,
+        final ProfiledPIDController anglepid = new ProfiledPIDController(1, 0, 0,
                 new TrapezoidProfile.Constraints(Math.toRadians(Limits.MAX_ROTATION),
                                                  Math.toRadians(Limits.MAX_ROTATION)));
         anglepid.enableContinuousInput(-Math.PI, Math.PI);

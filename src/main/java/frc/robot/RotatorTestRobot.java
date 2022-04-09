@@ -7,22 +7,20 @@ package frc.robot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.drivetrain.Rotator;
 
-/** Robot for testing single swerve module's rotation
+/** Robot for testing single swerve module's rotator
  * 
  *  Left joysick: Rotate
  *  Left bumper: Reset heading to zero
  *  Hold right bumber: Closed loop -180..180
+ * 
+ *  "Raw Angle" can be used to determine the zero offset of a module
  */
-public class RotationTestRobot extends TimedRobot
+public class RotatorTestRobot extends TimedRobot
 {
     private final Rotator rotator = new Rotator(0, 0.0);
-
-    final CommandBase reset = new InstantCommand(rotator::reset);
                                              
     @Override
     public void robotInit()
@@ -63,7 +61,7 @@ public class RotationTestRobot extends TimedRobot
     public void teleopPeriodic()
     {
         if (OperatorInterface.joystick.getLeftBumperPressed())
-            reset.schedule();
+            rotator.reset();
 
         final double input = -OperatorInterface.joystick.getLeftX();
         SmartDashboard.putNumber("Joystick", input);

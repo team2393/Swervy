@@ -23,6 +23,6 @@ public class Settings
     /** Zero heading for module 0-3 */
     public static final double[] MODULE_ZERO = { 342.0,
                                                    0.0,
-                                                   0.0,
+                                                 198.0,
                                                  254.0 };
 }

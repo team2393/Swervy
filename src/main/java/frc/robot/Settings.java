@@ -24,5 +24,5 @@ public class Settings
     public static final double[] MODULE_ZERO = { 342.0,
                                                    0.0,
                                                    0.0,
-                                                   0.0 };
+                                                 254.0 };
 }

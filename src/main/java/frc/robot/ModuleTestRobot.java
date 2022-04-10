@@ -24,8 +24,9 @@ import frc.robot.drivetrain.Rotator;
  */
 public class ModuleTestRobot extends TimedRobot
 {
-    private final Rotator rotator = new Rotator(0, Settings.MODULE_ZERO[0]);
-    private final Driver driver = new Driver(1);                      
+    private final int MODULE = 3;
+    private final Rotator rotator = new Rotator(MODULE, Settings.MODULE_ZERO[MODULE]);
+    private final Driver driver = new Driver(MODULE+1);
     
     @Override
     public void robotInit()

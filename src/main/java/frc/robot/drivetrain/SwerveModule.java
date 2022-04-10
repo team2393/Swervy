@@ -28,9 +28,9 @@ public class SwerveModule
     
     /** @param name Module name, used for network table entries
      *  @param location Location relative to center of robot
-     *  @param rotator_channel Channel used for analog encoder and rotation PWM
+     *  @param rotator_channel Channel used for analog encoder and rotation PWM [0-3]
      *  @param zero_heading Zero heading of rotator
-     *  @param driver_id Driver CAN ID
+     *  @param driver_id Driver CAN ID [1-4]
      */
     public SwerveModule(final String name, final Translation2d location,
                         final int rotator_channel, final double zero_heading,

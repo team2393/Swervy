@@ -11,14 +11,17 @@ public class Settings
 
     /** Maximum swerve speed [m/s] */
     // Actual maximum is about 3 m/s
-    public static final double MAX_SPEED = 1.5;
+    public static final double MAX_SPEED = 0.3;
 
-    /** Maximum rotational speed [degrees/s] */
+    /** Maximum rotational speed of modules [degrees/s] */
     // Actual maximum is around 600 deg/s
     public static final double MAX_ROTATION = 500.0;
 
     /** Maximum rotational voltage */
     public static final double MAX_ROTATION_VOLTAGE = 8.0;
+
+    /** Maximum rotational speed when using joystick to turn [degrees/s] */
+    public static final double MAX_MANUAL_ROTATION = 20.0;
 
     /** Zero heading for module 0-3 */
     public static final double[] MODULE_ZERO = { 342.0,

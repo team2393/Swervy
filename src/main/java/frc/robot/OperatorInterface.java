@@ -24,15 +24,13 @@ public class OperatorInterface
     /** @return Left (positive) or right (negative) speed [m/s] */
     public static double getLeftRight()
     {
-        // Max speed 1 m/s
         return -Settings.MAX_SPEED * MathUtil.applyDeadband(joystick.getRightX(), DEADBAND);
     }
 
     /** @return Rotation, positive for counter-clockwise [degrees/s]*/
     public static double getRotation()
     {
-        // Max speed 90 degrees/s
-        return -Settings.MAX_ROTATION * MathUtil.applyDeadband(joystick.getLeftX(), DEADBAND);
+        return -Settings.MAX_MANUAL_ROTATION * MathUtil.applyDeadband(joystick.getLeftX(), DEADBAND);
     }
 
     /** @return Pivot around left front? */

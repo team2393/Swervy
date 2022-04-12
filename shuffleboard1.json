@@ -1,71 +1,6 @@
 {
   "tabPane": [
     {
-      "title": "LiveWindow",
-      "autoPopulate": true,
-      "autoPopulatePrefix": "LiveWindow/",
-      "widgetPane": {
-        "gridSize": 64.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "titleType": 0,
-        "tiles": {
-          "0,0": {
-            "size": [
-              4,
-              7
-            ],
-            "content": {
-              "_type": "Subsystem Layout",
-              "_source0": "network_table:///LiveWindow/Ungrouped",
-              "_title": "Ungrouped",
-              "Layout/Label position": "BOTTOM",
-              "_children": [
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Analog Encoder[0]/Distance",
-                  "_title": "Analog Encoder[0]/Distance"
-                },
-                {
-                  "_type": "Voltage View",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/AnalogInput[0]",
-                  "_title": "AnalogInput[0]",
-                  "Range/Min": 0.0,
-                  "Range/Max": 5.0,
-                  "Range/Center": 0.0,
-                  "Visuals/Orientation": "HORIZONTAL",
-                  "Visuals/Number of tick marks": 5
-                },
-                {
-                  "_type": "Motor Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/SparkMini[0]",
-                  "_title": "SparkMini[0]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "Text View",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Counter[0]/Value",
-                  "_title": "Counter[0]/Value"
-                },
-                {
-                  "_type": "Motor Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/Talon FX [1]",
-                  "_title": "Talon FX [1]",
-                  "Visuals/Orientation": "HORIZONTAL"
-                },
-                {
-                  "_type": "PID Controller",
-                  "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[1]",
-                  "_title": "/LiveWindow/Ungrouped/PIDController[1]"
-                }
-              ]
-            }
-          }
-        }
-      }
-    },
-    {
       "title": "Modules",
       "autoPopulate": false,
       "autoPopulatePrefix": "",
@@ -76,48 +11,48 @@
         "vgap": 16.0,
         "titleType": 0,
         "tiles": {
-          "6,3": {
+          "1,0": {
             "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Command",
-              "_source0": "network_table:///SmartDashboard/Zero",
-              "_title": "SmartDashboard/Zero"
-            }
-          },
-          "8,1": {
-            "size": [
-              3,
+              2,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[1]/setpoint",
-              "_title": "LiveWindow/Ungrouped/PIDController[1]/setpoint"
+              "_source0": "network_table:///SmartDashboard/Heading0",
+              "_title": "/SmartDashboard/Heading0"
+            }
+          },
+          "4,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Heading1",
+              "_title": "/SmartDashboard/Heading1"
             }
           },
           "1,2": {
             "size": [
-              3,
+              2,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/Swerve1_heading",
-              "_title": "SmartDashboard/Swerve1_heading"
+              "_source0": "network_table:///SmartDashboard/Heading2",
+              "_title": "/SmartDashboard/Heading2"
             }
           },
-          "12,1": {
+          "4,2": {
             "size": [
-              3,
+              2,
               1
             ],
             "content": {
               "_type": "Text View",
-              "_source0": "network_table:///SmartDashboard/heading P",
-              "_title": "/SmartDashboard/heading P"
+              "_source0": "network_table:///SmartDashboard/Heading3",
+              "_title": "/SmartDashboard/Heading3"
             }
           }
         }
@@ -125,9 +60,9 @@
     }
   ],
   "windowGeometry": {
-    "x": -8.0,
-    "y": 226.0,
-    "width": 1548.800048828125,
-    "height": 602.7999877929688
+    "x": 616.0,
+    "y": 337.6000061035156,
+    "width": 770.4000244140625,
+    "height": 480.0
   }
 }

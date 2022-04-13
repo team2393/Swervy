@@ -111,6 +111,8 @@ public class Drivetrain extends SubsystemBase
 
         final SwerveModuleState states[] = kinematics.toSwerveModuleStates(new ChassisSpeeds(vx, vy, Math.toRadians(vr)),
                                                                            pivot);
+                                                                           
+        // TODO SwerveDriveKinematics.desaturateWheelSpeeds(states, some_max_speed);
         for (int i=0; i<N; ++i)
             modules[i].drive(states[i].speedMetersPerSecond, states[i].angle.getDegrees());
         

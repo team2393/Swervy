@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,7 +20,14 @@ public class SwervyRobot extends TimedRobot
 {
     private final Drivetrain drivetrain = new Drivetrain();
     private final DriveByJoystickCommand joydrive = new DriveByJoystickCommand(drivetrain);
+
+    /** Location of robot on field */
     private final Field2d field = new Field2d();
+
+    /** Offsets between robot's internal odometry and field location */
+    private final NetworkTableEntry nt_field_x = SmartDashboard.getEntry("Field X"),
+                                    nt_field_y = SmartDashboard.getEntry("Field Y"),
+                                    nt_field_heading = SmartDashboard.getEntry("Field Heading");
 
     @Override
     public void robotInit()
@@ -27,6 +37,10 @@ public class SwervyRobot extends TimedRobot
         System.out.println("** " + getClass().getName());
         System.out.println("********************************");
         System.out.println("********************************");
+
+        nt_field_x.setDefaultDouble(0.0);
+        nt_field_y.setDefaultDouble(0.0);
+        nt_field_heading.setDefaultDouble(0.0);
 
         SmartDashboard.putData("Field", field);
         SmartDashboard.putData("Drivetrain", drivetrain);
@@ -40,7 +54,10 @@ public class SwervyRobot extends TimedRobot
         CommandScheduler.getInstance().run();
 
         // Update field with latest robot location
-        field.setRobotPose(drivetrain.getPose());
+        final Pose2d pose = drivetrain.getPose();
+        field.setRobotPose(new Pose2d(pose.getX() + nt_field_x.getDouble(0.0),
+                                      pose.getY() + nt_field_y.getDouble(0.0),
+                                      Rotation2d.fromDegrees(pose.getRotation().getDegrees() + nt_field_heading.getDouble(0.0))));
     }
 
     @Override

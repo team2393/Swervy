@@ -3,6 +3,9 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 /** Speed limits, zero headings etc. */
 public class Settings
 {    
@@ -28,4 +31,26 @@ public class Settings
                                                   89.0,
                                                  198.0,
                                                  254.0 };
+
+    private static NetworkTableEntry nt_max_speed, nt_max_manual_rotation;
+
+    static
+    {
+        nt_max_speed = SmartDashboard.getEntry("Max Speed");
+        nt_max_speed.setDefaultDouble(Settings.MAX_SPEED);
+        nt_max_manual_rotation = SmartDashboard.getEntry("Max Manual Rotation");
+        nt_max_manual_rotation.setDefaultDouble(Settings.MAX_MANUAL_ROTATION);
+    }
+
+    /** @return Maximum speed [m/s] */
+    public static double getMaxSpeed()
+    {
+        return nt_max_speed.getDouble(Settings.MAX_SPEED);
+    }
+
+    /** @return Maximum rotational speed for manual drive [degree/s] */
+    public static double getMaxManualRotation()
+    {
+        return nt_max_manual_rotation.getDouble(Settings.MAX_MANUAL_ROTATION);
+    }    
 }

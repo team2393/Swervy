@@ -18,19 +18,19 @@ public class OperatorInterface
     public static double getForwardBackward()
     {
         // Max speed 1 m/s
-        return -Settings.MAX_SPEED * MathUtil.applyDeadband(joystick.getRightY(), DEADBAND);
+        return -Settings.getMaxSpeed() * MathUtil.applyDeadband(joystick.getRightY(), DEADBAND);
     }
 
     /** @return Left (positive) or right (negative) speed [m/s] */
     public static double getLeftRight()
     {
-        return -Settings.MAX_SPEED * MathUtil.applyDeadband(joystick.getRightX(), DEADBAND);
+        return -Settings.getMaxSpeed() * MathUtil.applyDeadband(joystick.getRightX(), DEADBAND);
     }
 
     /** @return Rotation, positive for counter-clockwise [degrees/s]*/
     public static double getRotation()
     {
-        return -Settings.MAX_MANUAL_ROTATION * MathUtil.applyDeadband(joystick.getLeftX(), DEADBAND);
+        return -Settings.getMaxManualRotation() * MathUtil.applyDeadband(joystick.getLeftX(), DEADBAND);
     }
 
     /** @return Pivot around left front? */

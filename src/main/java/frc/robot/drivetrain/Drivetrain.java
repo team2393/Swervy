@@ -21,10 +21,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -61,8 +59,6 @@ public class Drivetrain extends SubsystemBase
         new SwerveModule("Swerve3", new Translation2d(module_distance, Rotation2d.fromDegrees(90+45)),  3, Settings.MODULE_ZERO[3],  4)
     };
 
-    private final NetworkTableEntry[] nt_heading = new NetworkTableEntry[N];
-
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(modules[0].getLocation(),
                                                                                modules[1].getLocation(),
                                                                                modules[2].getLocation(),
@@ -82,7 +78,6 @@ public class Drivetrain extends SubsystemBase
                               i,
                               modules[i].getLocation().getX(),
                               modules[i].getLocation().getY());
-            nt_heading[i] = SmartDashboard.getEntry("Heading" + i);
         }
         
 
@@ -153,9 +148,6 @@ public class Drivetrain extends SubsystemBase
                         modules[1].getState(),
                         modules[2].getState(),
                         modules[3].getState());
-        
-        for (int i=0; i<N; ++i)
-            nt_heading[i].setDouble(modules[i].getHeading().getDegrees());
     }
 
     /** Create command that follows a trajectory

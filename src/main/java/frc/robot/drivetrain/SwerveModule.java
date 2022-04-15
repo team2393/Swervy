@@ -24,7 +24,7 @@ public class SwerveModule
 
     private SwerveModuleState desired_state = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
 
-    private final NetworkTableEntry nt_speed, nt_heading;
+    private final NetworkTableEntry np_distance, nt_speed, nt_heading;
     
     /** @param name Module name, used for network table entries
      *  @param location Location relative to center of robot
@@ -40,6 +40,7 @@ public class SwerveModule
         rotator = new Rotator(rotator_channel, zero_heading);
         driver = new Driver(driver_id);
 
+        np_distance = SmartDashboard.getEntry(name + "_distance");
         nt_speed = SmartDashboard.getEntry(name + "_speed");
         nt_heading = SmartDashboard.getEntry(name + "_heading");
     }
@@ -90,12 +91,17 @@ public class SwerveModule
         desired_state = state;
 
         if (RobotBase.isSimulation())
+        {
             nt_speed.setDouble(desired_state.speedMetersPerSecond);
+            // Not simulating driver.getDistance()...
+        }
         else
         {
             final SwerveModuleState optimized = SwerveModuleState.optimize(state, getHeading());
             rotator.setHeading(optimized.angle.getDegrees());
             driver.setSpeed(optimized.speedMetersPerSecond);
+            nt_speed.setDouble(driver.getSpeed());
+            nt_speed.setDouble(driver.getDistance());
         }
         nt_heading.setDouble(getHeading().getDegrees());
     }

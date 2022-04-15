@@ -46,7 +46,7 @@ public class Driver
         offset = driver.getSelectedSensorPosition();
     }
 
-    public double getPosition()
+    public double getDistance()
     {
         return (driver.getSelectedSensorPosition() - offset) / COUNTS_PER_METER;
     }

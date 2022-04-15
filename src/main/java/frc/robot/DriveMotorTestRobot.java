@@ -15,7 +15,7 @@ import frc.robot.drivetrain.Driver;
 /** Robot for testing single swerve module's drive motor
  * 
  *  Right joysick: Drive
- *  Left bumper: Reset position to zero
+ *  Left bumper: Reset distance to zero
  *  Hold right bumber: Closed loop -1..1 m/s
  */
 public class DriveMotorTestRobot extends TimedRobot
@@ -40,7 +40,7 @@ public class DriveMotorTestRobot extends TimedRobot
         CommandScheduler.getInstance().run();
 
         SmartDashboard.putNumber("Speed", driver.getSpeed());
-        SmartDashboard.putNumber("Position", driver.getPosition());
+        SmartDashboard.putNumber("Distance", driver.getDistance());
     }
 
     @Override

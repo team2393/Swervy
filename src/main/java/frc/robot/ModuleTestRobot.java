@@ -15,7 +15,7 @@ import frc.robot.drivetrain.Rotator;
  * 
  *  Left joysick: Rotate
  *  Left Trigger: Rotate real slow
- *  Left bumper: Reset heading and position to zero
+ *  Left bumper: Reset heading and distance to zero
  *  Hold right bumber: Closed loop -180..180
 
  *  Right joysick: Driver speed
@@ -53,7 +53,7 @@ public class ModuleTestRobot extends TimedRobot
         SmartDashboard.putNumber("Raw Angle", angle);
         SmartDashboard.putNumber("Heading", rotator.getHeading().getDegrees());
 
-        SmartDashboard.putNumber("Position", driver.getPosition());
+        SmartDashboard.putNumber("Distance", driver.getDistance());
         SmartDashboard.putNumber("Speed", driver.getSpeed());
     }
 

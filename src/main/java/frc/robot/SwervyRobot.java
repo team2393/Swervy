@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -54,16 +55,21 @@ public class SwervyRobot extends TimedRobot
         CommandScheduler.getInstance().run();
 
         // Update field with latest robot location
-        final Pose2d pose = drivetrain.getPose();
-        field.setRobotPose(new Pose2d(pose.getX() + nt_field_x.getDouble(0.0),
-                                      pose.getY() + nt_field_y.getDouble(0.0),
-                                      Rotation2d.fromDegrees(pose.getRotation().getDegrees() + nt_field_heading.getDouble(0.0))));
+        final Pose2d field_pos = new Pose2d(nt_field_x.getDouble(0.0),
+                                            nt_field_y.getDouble(0.0),
+                                            Rotation2d.fromDegrees(nt_field_heading.getDouble(0.0)));
+        final Pose2d robot_pos = drivetrain.getPose();
+        final Pose2d robot_on_field = field_pos.plus(new Transform2d(robot_pos.getTranslation(), robot_pos.getRotation()));        
+        field.setRobotPose(robot_on_field);
     }
 
     @Override
     public void teleopInit()
     {
-        drivetrain.reset(7.64, 1.764, 90);
+        nt_field_x.setDouble(7.64);
+        nt_field_y.setDouble(1.764);
+        nt_field_heading.setDouble(90);
+        drivetrain.reset();
         joydrive.schedule();
     }
 

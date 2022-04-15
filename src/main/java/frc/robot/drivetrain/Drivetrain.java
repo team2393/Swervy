@@ -121,15 +121,12 @@ public class Drivetrain extends SubsystemBase
         return odometry.getPoseMeters();
     }
 
-    /** Reset position
-     *  @param x Field position X [m]
-     *  @param y Field position Y [m]
-     *  @param heading Field heading [degrees]
-     */
-    public void reset(final double x, final double y, final double heading)
+    /** Reset positions to all zero */
+    public void reset()
     {
-        sim_heading = heading;
-        odometry.resetPosition(new Pose2d(x, y, Rotation2d.fromDegrees(heading)),
+        // TODO Reset drive and rotation
+        sim_heading = 0.0;
+        odometry.resetPosition(new Pose2d(),
                                Rotation2d.fromDegrees(sim_heading));
     }
     

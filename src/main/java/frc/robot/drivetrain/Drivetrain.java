@@ -21,8 +21,10 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -69,6 +71,9 @@ public class Drivetrain extends SubsystemBase
     /** Simulated heading [degrees] */
     private double sim_heading = 0.0;
 
+    /** Robot position relative to last reset() */
+    private NetworkTableEntry nt_x, nt_y, nt_heading;
+
     public Drivetrain()
     {
         System.out.println("Module locations:");
@@ -80,6 +85,9 @@ public class Drivetrain extends SubsystemBase
                               modules[i].getLocation().getY());
         }
         
+        nt_x = SmartDashboard.getEntry("X");
+        nt_y = SmartDashboard.getEntry("Y");
+        nt_heading = SmartDashboard.getEntry("Heading");
 
         // By default, tell motors to stay put
         setDefaultCommand(new IdleCommand(this));
@@ -145,6 +153,10 @@ public class Drivetrain extends SubsystemBase
                         modules[1].getState(),
                         modules[2].getState(),
                         modules[3].getState());
+        final Pose2d pose = getPose();
+        nt_x.setDouble(pose.getX());
+        nt_y.setDouble(pose.getY());
+        nt_heading.setDouble(pose.getRotation().getDegrees());
     }
 
     /** Create command that follows a trajectory

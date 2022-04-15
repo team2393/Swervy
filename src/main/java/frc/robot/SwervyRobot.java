@@ -96,25 +96,18 @@ public class SwervyRobot extends TimedRobot
         // field.getObject("traj").setTrajectory(trajectory);
         // final double robot_heading = field.getRobotPose().getRotation().getDegrees() + 90.0;
 
-        auto.addCommands(drivetrain.createFollower(45,
-                                                   7.64, 1.764, 90.0,
-                                                   7.64, 2.764, 90.0));
-
-        auto.addCommands(drivetrain.createFollower(90, 
-                                                   7.64, 2.764, -90.0,
-                                                   7.64, 1.764, -90.0,
-                                                   8.374, 0.453,-90.0));
-        
-        auto.addCommands(drivetrain.createFollower(40+180, 
-                                                   8.374, 0.453, 179.5,
-                                                   7.144, 0.453, 179.5,
-                                                   5.09,  1.96, 115.0));
-
-        auto.addCommands(drivetrain.createFollower(41.5,
-                                                   5.09, 1.96, 40.0+180,
-                                                   2.61, 1.09, 13.0+180,
-                                                   1.0, 1.17, -45.0+180));
-
+        auto.addCommands(drivetrain.createFollower(0,
+                                                   0.00, 0.00, -155.0,
+                                                   -1.35, -0.64, -155.0));
+        auto.addCommands(drivetrain.createFollower(-50,
+                                                   -1.35, -0.64, 90.0,
+                                                   -1.35,  0.64, 90.0,
+                                                    0.12,  2.58, 45.0 ));
+        auto.addCommands(drivetrain.createFollower(-45,
+                                                     0.12,  2.58, 135.0,
+                                                    -0.80,  5.73, 80.0,
+                                                    -0.55,  6.55, 42.0 ));
+ 
         auto.schedule();
     }
 

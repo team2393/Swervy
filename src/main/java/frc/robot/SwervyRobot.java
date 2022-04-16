@@ -48,7 +48,14 @@ public class SwervyRobot extends TimedRobot
         SmartDashboard.putData("Field", field);
         SmartDashboard.putData("Drivetrain", drivetrain);
 
-        final CommandBase reset = new InstantCommand(drivetrain::reset);
+        final CommandBase reset = new InstantCommand(drivetrain::reset)
+        {
+            @Override
+            public boolean runsWhenDisabled()
+            {
+                return true;
+            }
+        };
         reset.setName("Reset");
         SmartDashboard.putData(reset);
     }

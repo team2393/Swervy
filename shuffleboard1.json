@@ -200,7 +200,7 @@
               "_source0": "network_table:///SmartDashboard/Field",
               "_title": "SmartDashboard/Field",
               "Game/Game": "A2022_Rapid_React",
-              "Visuals/Robot Icon Size": 50.0,
+              "Visuals/Robot Icon Size": 100.0,
               "Visuals/Show Outside Circles": true
             }
           },
@@ -249,7 +249,7 @@
                 "0,3": {
                   "_type": "Command",
                   "_source0": "network_table:///SmartDashboard/Reset",
-                  "_title": ""
+                  "_title": "Position"
                 }
               }
             }
@@ -260,8 +260,8 @@
   ],
   "windowGeometry": {
     "x": -5.599999904632568,
-    "y": 172.39999389648438,
+    "y": 155.1999969482422,
     "width": 1545.5999755859375,
-    "height": 633.5999755859375
+    "height": 650.7999877929688
   }
 }

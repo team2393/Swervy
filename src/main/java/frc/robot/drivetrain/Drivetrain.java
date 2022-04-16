@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.ctre.phoenix.sensors.PigeonIMU;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -33,9 +35,6 @@ import frc.robot.Settings;
 /** Drivetrain, made up of swerve modules */
 public class Drivetrain extends SubsystemBase
 {
-    /** Distance of each module from center of robot */
-    private static final double module_distance = Math.sqrt(0.5*0.5 + 0.5*0.5);
-
     private static final Translation2d center = new Translation2d();
 
     /** Number of swerve modules */
@@ -63,6 +62,8 @@ public class Drivetrain extends SubsystemBase
         new SwerveModule("Swerve3", new Translation2d(-0.641/2, +0.620/2), 3, Settings.MODULE_ZERO[3],  4)
     };
 
+    private final PigeonIMU gyro = new PigeonIMU(0);
+
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(modules[0].getLocation(),
                                                                                modules[1].getLocation(),
                                                                                modules[2].getLocation(),
@@ -72,6 +73,8 @@ public class Drivetrain extends SubsystemBase
 
     /** Simulated heading [degrees] */
     private double sim_heading = 0.0;
+
+    private double gyro_zero = 0.0;
 
     /** Robot position relative to last reset() */
     private NetworkTableEntry nt_x, nt_y, nt_heading;
@@ -90,6 +93,8 @@ public class Drivetrain extends SubsystemBase
         nt_x = SmartDashboard.getEntry("X");
         nt_y = SmartDashboard.getEntry("Y");
         nt_heading = SmartDashboard.getEntry("Heading");
+
+        gyro.configFactoryDefault();
 
         // By default, tell motors to stay put
         setDefaultCommand(new IdleCommand(this));
@@ -134,10 +139,11 @@ public class Drivetrain extends SubsystemBase
     /** Reset positions to all zero */
     public void reset()
     {
-        // TODO Reset drive and rotation
+        // Reset drive and rotation
         sim_heading = 0.0;
+        gyro_zero = gyro.getFusedHeading();
         odometry.resetPosition(new Pose2d(),
-                               Rotation2d.fromDegrees(sim_heading));
+                               Rotation2d.fromDegrees(0.0));
         for (int i=0; i<N; ++i)
             modules[i].resetDistance();
     }
@@ -146,12 +152,11 @@ public class Drivetrain extends SubsystemBase
     public void periodic()
     {
         // Update estimated position from module states and gyro
-        // TODO Read from gyro
         final double heading;
         if (RobotBase.isSimulation())
             heading = sim_heading;
         else
-            heading = 0.0;
+            heading = gyro.getFusedHeading() - gyro_zero;
         odometry.update(Rotation2d.fromDegrees(heading),
                         modules[0].getState(),
                         modules[1].getState(),

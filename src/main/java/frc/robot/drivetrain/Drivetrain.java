@@ -202,7 +202,7 @@ public class Drivetrain extends SubsystemBase
         final PIDController xpid = new PIDController(1, 0, 0);
         final PIDController ypid = new PIDController(1, 0, 0);
         // angle controller uses radians
-        final ProfiledPIDController anglepid = new ProfiledPIDController(1, 0, 0,
+        final ProfiledPIDController anglepid = new ProfiledPIDController(2, 0, 0,
                 new TrapezoidProfile.Constraints(Math.toRadians(Settings.MAX_ROTATION),
                                                  Math.toRadians(Settings.MAX_ROTATION)));
         anglepid.enableContinuousInput(-Math.PI, Math.PI);

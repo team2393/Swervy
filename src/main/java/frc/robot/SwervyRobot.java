@@ -69,23 +69,23 @@ public class SwervyRobot extends TimedRobot
             new ResetCommand(drivetrain),
             drivetrain.createFollower(-90,
                                       0.00, 0.00, 0.0,
-                                      0.50, 0.00, 0.0));
-        option.setName("0.5 FwdRot");
+                                      1.00, 0.00, 0.0));
+        option.setName("1.0 FwdRot");
         auto_options.addOption(option.getName(), option);
 
 
         option = new SequentialCommandGroup(
             new ResetCommand(drivetrain),
-            drivetrain.createFollower(-1*45,
+            drivetrain.createFollower(-1*90,
                                       0.00, 0.00, 0.0,
                                       0.50, 0.00, 0.0),
-            drivetrain.createFollower(-2*45,
+            drivetrain.createFollower(-2*90,
                                       0.50, 0.00, 90.0,
                                       0.50, 0.50, 90.0),
-            drivetrain.createFollower(-1*45,
+            drivetrain.createFollower(-3*90,
                                       0.50, 0.50, 180.0,
                                       0.00, 0.50, 180.0),
-            drivetrain.createFollower(0,
+            drivetrain.createFollower(-4*90,
                                       0.00, 0.50, -90.0,
                                       0.00, 0.00, -90.0));
         option.setName("0.5 Square");

@@ -18,13 +18,13 @@ public class Settings
 
     /** Maximum rotational speed of modules [degrees/s] */
     // Actual maximum is around 600 deg/s
-    public static final double MAX_ROTATION = 500.0;
+    public static final double MAX_ROTATION = 360.0;
 
     /** Maximum rotational voltage */
     public static final double MAX_ROTATION_VOLTAGE = 8.0;
 
     /** Maximum rotational speed when using joystick to turn [degrees/s] */
-    public static final double MAX_MANUAL_ROTATION = 20.0;
+    public static final double MAX_MANUAL_ROTATION = 30.0;
 
     /** Zero heading for module 0-3 */
     public static final double[] MODULE_ZERO = { 342.0,

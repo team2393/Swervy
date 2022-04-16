@@ -67,7 +67,7 @@ public class ModuleTestRobot extends TimedRobot
     {
         if (OperatorInterface.joystick.getLeftBumperPressed())
         {
-            rotator.reset();
+            rotator.setZero();
             driver.reset();
         }
 

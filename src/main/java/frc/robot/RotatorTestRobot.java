@@ -61,7 +61,7 @@ public class RotatorTestRobot extends TimedRobot
     public void teleopPeriodic()
     {
         if (OperatorInterface.joystick.getLeftBumperPressed())
-            rotator.reset();
+            rotator.setZero();
 
         final double input = -OperatorInterface.joystick.getLeftX();
         SmartDashboard.putNumber("Joystick", input);

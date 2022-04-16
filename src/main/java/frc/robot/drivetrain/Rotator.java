@@ -38,10 +38,21 @@ public class Rotator
         this.zero = zero;
     }
 
-    public void reset()
+    /** Set zero angle to current heading */
+    public void setZero()
     {
-        zero = getRawHeading();
-        heading_pid.reset(0.0);
+        setZero(getRawHeading());
+    }
+    
+    /** @param zero_heading Heading that should be declared 'zero' */
+    public void setZero(final double zero_heading)
+    {
+        if (zero != zero_heading)
+        {
+            zero = zero_heading;
+            // If zero was changed, reset the PID
+            heading_pid.reset(0.0);
+        }
     }
 
     public void configureHeadingPID(final double kp, final double ki, final double kd)

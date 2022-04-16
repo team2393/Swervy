@@ -13,7 +13,7 @@
         "tiles": {
           "0,0": {
             "size": [
-              3,
+              2,
               4
             ],
             "content": {
@@ -23,11 +23,6 @@
               "Layout/Number of rows": 4,
               "Layout/Label position": "TOP",
               "_children": {
-                "0,0": {
-                  "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/Swerve0_heading",
-                  "_title": "Heading"
-                },
                 "0,1": {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Swerve0_zero",
@@ -42,13 +37,18 @@
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Swerve0_speed",
                   "_title": "Speed"
+                },
+                "0,0": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Swerve0_heading",
+                  "_title": "Heading"
                 }
               }
             }
           },
-          "3,0": {
+          "2,0": {
             "size": [
-              3,
+              2,
               4
             ],
             "content": {
@@ -58,11 +58,6 @@
               "Layout/Number of rows": 4,
               "Layout/Label position": "TOP",
               "_children": {
-                "0,0": {
-                  "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/Swerve1_heading",
-                  "_title": "Heading"
-                },
                 "0,1": {
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Swerve1_zero",
@@ -77,13 +72,18 @@
                   "_type": "Text View",
                   "_source0": "network_table:///SmartDashboard/Swerve1_speed",
                   "_title": "Speed"
+                },
+                "0,0": {
+                  "_type": "Text View",
+                  "_source0": "network_table:///SmartDashboard/Swerve1_heading",
+                  "_title": "Heading"
                 }
               }
             }
           },
-          "6,0": {
+          "4,0": {
             "size": [
-              3,
+              2,
               4
             ],
             "content": {
@@ -116,9 +116,9 @@
               }
             }
           },
-          "9,0": {
+          "6,0": {
             "size": [
-              3,
+              2,
               4
             ],
             "content": {
@@ -151,9 +151,9 @@
               }
             }
           },
-          "12,0": {
+          "8,0": {
             "size": [
-              3,
+              2,
               3
             ],
             "content": {
@@ -175,38 +175,10 @@
                 }
               }
             }
-          }
-        }
-      }
-    },
-    {
-      "title": "Field",
-      "autoPopulate": false,
-      "autoPopulatePrefix": "",
-      "widgetPane": {
-        "gridSize": 64.0,
-        "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
-        "titleType": 0,
-        "tiles": {
-          "0,0": {
-            "size": [
-              11,
-              7
-            ],
-            "content": {
-              "_type": "Field",
-              "_source0": "network_table:///SmartDashboard/Field",
-              "_title": "SmartDashboard/Field",
-              "Game/Game": "A2022_Rapid_React",
-              "Visuals/Robot Icon Size": 100.0,
-              "Visuals/Show Outside Circles": true
-            }
           },
-          "11,0": {
+          "10,0": {
             "size": [
-              4,
+              3,
               5
             ],
             "content": {
@@ -226,10 +198,15 @@
                   "_source0": "network_table:///SmartDashboard/Y",
                   "_title": "Y"
                 },
-                "1,2": {
+                "0,2": {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/Field Heading",
-                  "_title": "Field Heading"
+                  "_source0": "network_table:///SmartDashboard/Heading",
+                  "_title": "Heading"
+                },
+                "0,3": {
+                  "_type": "Command",
+                  "_source0": "network_table:///SmartDashboard/Reset",
+                  "_title": "Cmd"
                 },
                 "1,0": {
                   "_type": "Text View",
@@ -241,15 +218,10 @@
                   "_source0": "network_table:///SmartDashboard/Field Y",
                   "_title": "Field Y"
                 },
-                "0,2": {
+                "1,2": {
                   "_type": "Text View",
-                  "_source0": "network_table:///SmartDashboard/Heading",
-                  "_title": "Heading"
-                },
-                "0,3": {
-                  "_type": "Command",
-                  "_source0": "network_table:///SmartDashboard/Reset",
-                  "_title": "Position"
+                  "_source0": "network_table:///SmartDashboard/Field Heading",
+                  "_title": "Field Heading"
                 }
               }
             }
@@ -260,8 +232,8 @@
   ],
   "windowGeometry": {
     "x": -5.599999904632568,
-    "y": 155.1999969482422,
+    "y": 275.20001220703125,
     "width": 1545.5999755859375,
-    "height": 650.7999877929688
+    "height": 530.7999877929688
   }
 }

@@ -15,6 +15,15 @@ public class Driver
 {
     // 2048 ticks per revolution, 6.67:1 gearing, 4 inch wheels
     private final static double COUNTS_PER_METER = 2048.0 * 6.67 / Units.inchesToMeters(Math.PI*4.0);
+
+    /*
+    Odometry    Measurement Diff
+    1.24        1.3         4.72%
+    1.46        1.43        -2.08%
+    1.31        1.38        5.20%
+    1.5         1.47        -2.02%
+    0.46        0.5         8.33%
+    */
     private final WPI_TalonFX driver;
     private double offset = 0;
     

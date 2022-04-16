@@ -55,10 +55,12 @@ public class Drivetrain extends SubsystemBase
      */
     private final SwerveModule[] modules = new SwerveModule[]
     {
-        new SwerveModule("Swerve0", new Translation2d(module_distance, Rotation2d.fromDegrees(45)),     0, Settings.MODULE_ZERO[0],  1),
-        new SwerveModule("Swerve1", new Translation2d(module_distance, Rotation2d.fromDegrees(-45)),    1, Settings.MODULE_ZERO[1],  2),
-        new SwerveModule("Swerve2", new Translation2d(module_distance, Rotation2d.fromDegrees(-90-45)), 2, Settings.MODULE_ZERO[2],  3),
-        new SwerveModule("Swerve3", new Translation2d(module_distance, Rotation2d.fromDegrees(90+45)),  3, Settings.MODULE_ZERO[3],  4)
+        // Distance between left/right wheels: 62.0 cm
+        // Distance between front/back wheels: 64.1 cm
+        new SwerveModule("Swerve0", new Translation2d(+0.641/2, +0.620/2), 0, Settings.MODULE_ZERO[0],  1),
+        new SwerveModule("Swerve1", new Translation2d(+0.641/2, -0.620/2), 1, Settings.MODULE_ZERO[1],  2),
+        new SwerveModule("Swerve2", new Translation2d(-0.641/2, -0.620/2), 2, Settings.MODULE_ZERO[2],  3),
+        new SwerveModule("Swerve3", new Translation2d(-0.641/2, +0.620/2), 3, Settings.MODULE_ZERO[3],  4)
     };
 
     private final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(modules[0].getLocation(),
@@ -136,6 +138,8 @@ public class Drivetrain extends SubsystemBase
         sim_heading = 0.0;
         odometry.resetPosition(new Pose2d(),
                                Rotation2d.fromDegrees(sim_heading));
+        for (int i=0; i<N; ++i)
+            modules[i].resetDistance();
     }
     
     @Override

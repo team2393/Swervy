@@ -11,7 +11,9 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.drivetrain.DriveByJoystickCommand;
 import frc.robot.drivetrain.Drivetrain;
@@ -45,6 +47,10 @@ public class SwervyRobot extends TimedRobot
 
         SmartDashboard.putData("Field", field);
         SmartDashboard.putData("Drivetrain", drivetrain);
+
+        final CommandBase reset = new InstantCommand(drivetrain::reset);
+        reset.setName("Reset");
+        SmartDashboard.putData(reset);
     }
 
     @Override

@@ -53,6 +53,11 @@ public class SwerveModule
         return location;
     }    
     
+    public void resetDistance()
+    {
+        driver.reset();
+    }
+
     private double getSpeed()
     {
         if (RobotBase.isSimulation())

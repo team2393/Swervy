@@ -56,6 +56,11 @@ public class SwervyRobot extends TimedRobot
 
         auto_options.setDefaultOption("Nothing", new InstantCommand());
 
+        // Create trajectory
+        // The heading of each waypoint is used to guide the
+        // trajectory along the path,
+        // it is NOT the actual heading of the robot because
+        // robot can swerve!
         CommandBase option = new SequentialCommandGroup(
             new ResetCommand(drivetrain),
             drivetrain.createFollower(0,
@@ -64,15 +69,27 @@ public class SwervyRobot extends TimedRobot
         option.setName("0.5 Fwd");
         auto_options.addOption(option.getName(), option);
 
+        option = new SequentialCommandGroup(
+            new ResetCommand(drivetrain),
+            drivetrain.createFollower(0,
+                                      0.00, 0.00, 0.0,
+                                      0.50, 0.00, 0.0),
+            drivetrain.createFollower(0,
+                                      0.50, 0.00, 180.0,
+                                      0.00, 0.00, 180.0));
+        option.setName("0.5 FwdBack");
+        auto_options.addOption(option.getName(), option);
 
         option = new SequentialCommandGroup(
             new ResetCommand(drivetrain),
             drivetrain.createFollower(-90,
                                       0.00, 0.00, 0.0,
-                                      1.00, 0.00, 0.0));
-        option.setName("1.0 FwdRot");
+                                      1.00, 0.00, 0.0),
+            drivetrain.createFollower(0,
+                                      1.00, 0.00, 180.0,
+                                      0.00, 0.00, 180.0));
+        option.setName("1.0 FwdRotBack");
         auto_options.addOption(option.getName(), option);
-
 
         option = new SequentialCommandGroup(
             new ResetCommand(drivetrain),
@@ -93,12 +110,6 @@ public class SwervyRobot extends TimedRobot
 
 /*
         final SequentialCommandGroup auto = new SequentialCommandGroup();
-        
-        // Create trajectory
-        // The heading of each waypoint is used to guide the
-        // trajectory along the path,
-        // it is NOT the actual heading of the robot because
-        // robot can swerve!
         
         // Start trajectory at current robot position
         // trajectory = trajectory.transformBy(

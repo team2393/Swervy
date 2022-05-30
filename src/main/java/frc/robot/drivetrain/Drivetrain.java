@@ -6,10 +6,13 @@ package frc.robot.drivetrain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix.sensors.PigeonIMU;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,8 +29,11 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Settings;
@@ -147,16 +153,21 @@ public class Drivetrain extends SubsystemBase
         for (int i=0; i<N; ++i)
             modules[i].resetDistance();
     }
+
+    /** @return Heading, relative to last 'reset' to zero, in degrees */
+    public double getHeading()
+    {
+        if (RobotBase.isSimulation())
+            return sim_heading;
+        else
+            return gyro.getFusedHeading() - gyro_zero;
+    }
     
     @Override
     public void periodic()
     {
         // Update estimated position from module states and gyro
-        final double heading;
-        if (RobotBase.isSimulation())
-            heading = sim_heading;
-        else
-            heading = gyro.getFusedHeading() - gyro_zero;
+        final double heading = getHeading();
         odometry.update(Rotation2d.fromDegrees(heading),
                         modules[0].getState(),
                         modules[1].getState(),
@@ -178,7 +189,6 @@ public class Drivetrain extends SubsystemBase
     {        
         // Max speed used for the created trajectory
         final TrajectoryConfig config = new TrajectoryConfig(Settings.MAX_SPEED, 2*Settings.MAX_SPEED);
-
         if (xyh.length % 3 != 0)
             throw new IllegalArgumentException("Expected X, Y, Heading[], got " + xyh.length + " elements");
         final List<Pose2d> waypoints = new ArrayList<>();
@@ -217,8 +227,32 @@ public class Drivetrain extends SubsystemBase
             if (RobotBase.isSimulation())
                 sim_heading += Math.toDegrees(kinematics.toChassisSpeeds(states).omegaRadiansPerSecond) * TimedRobot.kDefaultPeriod;
         };
-        return new SwerveControllerCommand(trajectory,
-           this::getPose,
-           kinematics, xpid, ypid, anglepid, () -> heading_rad, update_modules, this);
+
+        // At start of move, get snapshot of start heading and start timer
+        // During move, tell SwerveControllerCommand to head robot
+        // to a value between that start heading and final robot_heading,
+        // interpolating from the start time to the end of the trajectory runtime.
+        final AtomicReference<Double> start_heading = new AtomicReference<>(0.0);
+        final Timer timer = new Timer();
+        final CommandBase start = new InstantCommand(() ->
+        {
+            start_heading.set(getHeading());
+            timer.reset();
+            timer.start();
+        });
+        final Supplier<Rotation2d> interpolate_heading = () ->
+        {
+            // TODO Debug, doesn't work as expected
+            final double fraction = timer.get() / trajectory.getTotalTimeSeconds();
+            final double desired_heading = MathUtil.interpolate(start_heading.get(), robot_heading, fraction);
+            // System.out.format("%.2f from %f to %f : %6.1f\n", fraction, start_heading.get(), robot_heading, desired_heading);
+            return Rotation2d.fromDegrees(desired_heading);
+        };
+        final Supplier<Rotation2d> fixed_heading = () -> Rotation2d.fromDegrees(robot_heading);
+        return new SequentialCommandGroup(
+            start,
+            new SwerveControllerCommand(trajectory,
+                                        this::getPose,
+                                        kinematics, xpid, ypid, anglepid, fixed_heading, update_modules, this));
    }
 }
